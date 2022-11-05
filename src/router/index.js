@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import HelpView from "../views/HelpView.vue";
-import DirectoryView from "../views/DirectoryView.vue"
+import DirectoryView from "../views/DirectoryView.vue";
+import TopBarComponent from "../components/TopBarComponent.vue";
+import VideosView from "../views/VideosView.vue";
+import MapView from "../views/MapView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,22 +11,58 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView,
+      components: {
+        default: HomeView,
+        topbar: TopBarComponent,
+      },
+      props: {
+        default: false,
+        topbar: {
+          title: "Helpify",
+        },
+      },
     },
     {
       path: "/directory",
       name: "directory",
-      component: DirectoryView
+      components: {
+        default: DirectoryView,
+        topbar: TopBarComponent,
+      },
+      props: {
+        default: false,
+        topbar: {
+          title: "Contacts",
+        },
+      },
     },
     {
       path: "/videos",
       name: "videos",
-      component: DirectoryView
+      components: {
+        default: VideosView,
+        topbar: TopBarComponent,
+      },
+      props: {
+        default: false,
+        topbar: {
+          title: "Videos",
+        },
+      },
     },
     {
       path: "/map",
       name: "map",
-      component: DirectoryView
+      components: {
+        default: MapView,
+        topbar: TopBarComponent,
+      },
+      props: {
+        default: false,
+        topbar: {
+          title: "Map",
+        },
+      },
     },
   ],
 });
