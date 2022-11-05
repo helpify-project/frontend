@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+import { Icon } from '@iconify/vue';
 </script>
 
 <template>
@@ -7,32 +8,34 @@ import { RouterLink, RouterView } from "vue-router";
   <RouterView>
   </RouterView>
   <nav>
-    <RouterLink :to="{ name: 'home' }">
+    <RouterLink :to="{ name: 'home' }" draggable="false">
       <div class="navlink">
-        <img src="@/assets/home.svg">
+        <Icon icon="ant-design:home-outlined" :width="26" :height="26"></Icon>
         <p>Home</p>
       </div>
     </RouterLink>
-    <RouterLink :to="{ name: 'videos' }">
+    <RouterLink :to="{ name: 'videos' }" draggable="false">
       <div class="navlink">
-        <img src="@/assets/video.svg">
+        <Icon icon="ant-design:play-square-outlined" :width="26" :height="26"></Icon>
+
         <p>Videos</p>
       </div>
     </RouterLink>
     <div class="help">
       <div class="help__inner">
-        <img src="@/assets/phone.svg">
+        <Icon icon="ant-design:phone-outlined" :width="48" :height="48" :horizontalFlip="true"></Icon>
+
       </div>
     </div>
-    <RouterLink :to="{ name: 'map' }">
+    <RouterLink :to="{ name: 'map' }" draggable="false">
       <div class="navlink">
-        <img src="@/assets/map.svg">
+        <Icon icon="ant-design:environment-outlined" :width="26" :height="26"></Icon>
         <p>Map</p>
       </div>
     </RouterLink>
-    <RouterLink :to="{ name: 'directory' }">
+    <RouterLink :to="{ name: 'directory' }" draggable="false">
       <div class="navlink">
-        <img src="@/assets/contact.svg">
+        <Icon icon="ant-design:idcard-outlined" :width="26" :height="26"></Icon>
         <p>Contacts</p>
       </div>
     </RouterLink>
@@ -73,6 +76,7 @@ nav {
   width: 75px;
   height: 75px;
   border: 1px solid var(--grey);
+  color: white;
   border-radius: 999px;
   background: linear-gradient(180deg, #18A0FB 0%, #9718FB 100%);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
