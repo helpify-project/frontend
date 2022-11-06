@@ -30,8 +30,9 @@ const onCallRequest = () => {
 async function onChatRequest () {
   const res = await jsonrpc("room_list", []);
 
-  if (res[0]) {
+  if (res.length > 0) {
     router.push({ name: 'chat', params: { id: res[0].id }});
+    showModal.value = false;
     return;
   }
 

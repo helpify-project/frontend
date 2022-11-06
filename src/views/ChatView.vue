@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { jsonrpc } from '../stores/utils';
 import { useRoute } from 'vue-router';
@@ -35,19 +35,26 @@ const messages = ref([]);
 
 const help_type = ref("Anyone");
 
+let intervalnr;
+
 onMounted(async () => {
     const roomId = route.params.id;
 
-    setInterval(
-        messages.value = await jsonrpc("chat_history", [ roomId ]),
-        1000
-    );
+    intervalnr = setInterval(async () => {
+        messages.value = await jsonrpc("chat_history", [ roomId ]);
+    }, 1500);
 });
+
+onUnmounted(async () => {
+    clearInterval(intervalnr);
+})
 
 const onSendText = async () => {
     const roomId = route.params.id;
 
     await jsonrpc("chat_send", [{ roomId, message: newMessageText.value }]);
+
+    newMessageText.value = "";
 }
 
 </script>
@@ -60,6 +67,7 @@ const onSendText = async () => {
     display: flex;
     height: 100%;
     flex-direction: column;
+    padding-bottom: 16rem;
 }
 .new-message {
     display: flex;
@@ -80,7 +88,7 @@ const onSendText = async () => {
 
     width: 100%;
     transition: border 200ms ease;
-    background-color: 1rem;
+    background-color: white;
 }
 
 .inputwrapper:focus-within {

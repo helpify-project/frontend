@@ -8,9 +8,11 @@
         @click="onChatRequest"
     ></Icon>
 
-    <h1 @onclick="onBecomeAdministrator()">
-      {{ title }}
-    </h1>
+    <div @click="onBecomeAdministrator()">
+        <h1>
+        {{ title }}
+        </h1>  
+    </div>
 
     <Icon
         icon="ant-design:search-outlined"
@@ -23,18 +25,31 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
+import { jsonrpc } from '../stores/utils';
+
 const router = useRouter();
 
-function onChatRequest () {
-    router.push({ name: 'chat', params: { id: 1 }});
+async function onChatRequest () {
+  const res = await jsonrpc("room_list", []);
+
+  if (res.length > 0) {
+    router.push({ name: 'chat', params: { id: res[0].id }});
+    return;
+  }
+
+  const roomId = await jsonrpc("room_create", []);
+
+  router.push({ name: 'chat', params: { id: roomId }});
+  showModal.value = false;
 }
 
 async function onBecomeAdministrator () {
     const req = await fetch(import.meta.env.VITE_API_URL + "/chat/iamsupport", {
         method: "GET",
+        credentials: 'include',
     });
 
-    if (!res.ok) {
+    if (!req.ok) {
         throw new Error("Vittu");
     }
     return;
