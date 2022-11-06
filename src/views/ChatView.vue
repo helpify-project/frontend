@@ -4,13 +4,10 @@
             <p>You are chatting with <span>{{ help_type }}</span><br>
             All chats remain anonymous.</p>
         </div>
-        <div class="message receiver">
-            <img :src="anyone" />
-            <p>Lorem ipsum dolor sit amet, consectetur edipiscing elit, sed do elusmod tempor incididunt ut labore.</p>
-        </div>
-        <div class="message sender">
-            <p>Lorem ipsum dolor sit amet, consectetur edipiscing elit, sed do elusmod tempor incididunt ut labore.</p>
-            <img :src="anon" />
+        <div v-for="message in messages" class="message receiver" :class="{ receiver: message.userType == 1, sender: message.userType == 0}">
+            <img v-if="message.userType == 1" :src="anyone" />
+            <p>{{ message.message }}</p>
+            <img v-if="message.userType == 0" :src="anon" />
         </div>
         <div class="new-message">
             <div class="inputwrapper">
@@ -22,11 +19,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
+import { jsonrpc } from '../stores/utils';
+import { useRoute } from 'vue-router';
 
 import anyone from '@/assets/anyone.png';
 import anon from '@/assets/anon.png';
+
+const route = useRoute();
 
 const newMessageText = ref("");
 
@@ -34,12 +35,19 @@ const messages = ref([]);
 
 const help_type = ref("Anyone");
 
-const chatHistory = [
+onMounted(async () => {
+    const roomId = route.params.id;
 
-]
+    setInterval(
+        messages.value = await jsonrpc("chat_history", [ roomId ]),
+        1000
+    );
+});
 
-const onSendText = () => {
+const onSendText = async () => {
+    const roomId = route.params.id;
 
+    await jsonrpc("chat_send", [{ roomId, message: newMessageText.value }]);
 }
 
 </script>

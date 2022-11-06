@@ -29,7 +29,14 @@ function onChatRequest () {
     router.push({ name: 'chat', params: { id: 1 }});
 }
 
-function onBecomeAdministrator () {
+async function onBecomeAdministrator () {
+    const req = await fetch(import.meta.env.VITE_API_URL + "/chat/iamsupport", {
+        method: "GET",
+    });
+
+    if (!res.ok) {
+        throw new Error("Vittu");
+    }
     return;
 }
 

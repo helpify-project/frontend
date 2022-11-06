@@ -4,6 +4,8 @@ import { Icon } from "@iconify/vue";
 import { ref } from "vue";
 import { Multiselect } from "vue-multiselect";
 import { useRouter } from 'vue-router';
+import { jsonrpc } from "./stores/utils";
+
 const router = useRouter()
 
 const helpTypeOptions = [
@@ -25,8 +27,17 @@ const onCallRequest = () => {
   callLink.value.click();
 }
 
-function onChatRequest () {
-  router.push({ name: 'chat', params: { id: 1 }});
+async function onChatRequest () {
+  const res = await jsonrpc("room_list", []);
+
+  if (res[0]) {
+    router.push({ name: 'chat', params: { id: res[0].id }});
+    return;
+  }
+
+  const roomId = await jsonrpc("room_create", []);
+
+  router.push({ name: 'chat', params: { id: roomId }});
   showModal.value = false;
 }
 
@@ -208,13 +219,15 @@ nav .navlink p {
   display: none;
   place-items: center stretch;
 
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
 
   padding: 2rem 1rem;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
+
+  z-index: 2;
 }
 
 .help-modal__wrapper.show {
