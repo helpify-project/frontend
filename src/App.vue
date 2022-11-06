@@ -3,6 +3,8 @@ import { RouterLink, RouterView } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
 import { Multiselect } from "vue-multiselect";
+import { useRouter } from 'vue-router';
+const router = useRouter()
 
 const helpTypeOptions = [
   "Anyone",
@@ -16,15 +18,21 @@ const helpType = ref("");
 
 const showModal = ref(false);
 
+const callNumber = ref("");
+const callLink = ref(null);
+
 const onCallRequest = () => {
-  return;
+  callLink.value.click();
 }
 
-const onChatRequest = () => {
-  return;
+function onChatRequest () {
+  router.push({ name: 'chat', params: { id: 1 }});
+  showModal.value = false;
 }
 
 const onHelpRequest = () => {
+  callNumber.value = "tel:+37253731015";
+
   showModal.value = true;
 }
 
@@ -36,7 +44,9 @@ const onModalClose = () => {
 <template>
   <div class="layout">
     <RouterView class="topbar" name="topbar"></RouterView>
-    <RouterView></RouterView>
+    <div class="content">
+      <RouterView></RouterView>
+    </div>
     <nav>
       <RouterLink :to="{ name: 'home' }" draggable="false">
         <div class="navlink">
@@ -65,14 +75,14 @@ const onModalClose = () => {
           ></Icon>
         </div>
       </div>
-      <RouterLink :to="{ name: 'map' }" draggable="false">
+      <RouterLink :to="{ name: 'quiz' }" draggable="false">
         <div class="navlink">
           <Icon
-            icon="ant-design:environment-outlined"
+            icon="material-symbols:quiz-outline-rounded"
             :width="26"
             :height="26"
           ></Icon>
-          <p>Map</p>
+          <p>Quiz</p>
         </div>
       </RouterLink>
       <RouterLink :to="{ name: 'directory' }" draggable="false">
@@ -90,20 +100,20 @@ const onModalClose = () => {
       <div class="help-modal">
         <Icon icon="ant-design:close-circle-outlined" class="close" @click="onModalClose()" :height="28" :width="28"></Icon>
         <p>I want to speak to</p>
-        <Multiselect v-model="helpType" :options="helpTypeOptions">
+        <Multiselect v-model="helpType" :options="helpTypeOptions" :searchable="false" :hide-selected="true" :select-label="''" :preselect-first="true" :prevent-autofocus="true">
         </Multiselect>
-
+        <a :href="callNumber" style="display: none;" ref="callLink"></a>
         <div class="help-types">
-          <div class="help" @click="onCallRequest()">
-            <div class="help__inner">
-              <Icon
-                icon="ant-design:phone-outlined"
-                :width="48"
-                :height="48"
-                :horizontalFlip="true"
-              ></Icon>
+            <div class="help" @click="onCallRequest()">
+              <div class="help__inner">
+                <Icon
+                  icon="ant-design:phone-outlined"
+                  :width="48"
+                  :height="48"
+                  :horizontalFlip="true"
+                ></Icon>
+              </div>
             </div>
-          </div>
           <div class="help" @click="onChatRequest()">
             <div class="help__inner">
               <Icon
@@ -131,6 +141,7 @@ nav {
   bottom: 0;
   width: 100%;
   height: 75px;
+  background-color: white;
   border-top: 1px solid rgba(140, 140, 140, 0.2);
 }
 
@@ -180,11 +191,16 @@ nav .navlink p {
 }
 
 .topbar {
-  display: grid;
-  place-items: center;
-  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  padding: 1rem 1rem;
   color: var(--blue);
+  background-color: white;
   border-bottom: 1px solid rgba(140, 140, 140, 0.2);
+  z-index: 1;
 }
 
 .help-modal__wrapper {
@@ -231,7 +247,7 @@ nav .navlink p {
 
 .help-types {
   display: flex;
-  column-gap: 4rem;
+  column-gap: 2rem;
   justify-content: center;
 }
 
@@ -240,6 +256,9 @@ nav .navlink p {
   height: 90px;
 }
 
+.content {
+  margin-bottom: 5rem;
+}
 
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>

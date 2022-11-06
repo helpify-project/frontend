@@ -3,7 +3,8 @@ import HomeView from "../views/HomeView.vue";
 import DirectoryView from "../views/DirectoryView.vue";
 import TopBarComponent from "../components/TopBarComponent.vue";
 import VideosView from "../views/VideosView.vue";
-import MapView from "../views/MapView.vue";
+import QuizView from "../views/QuizView.vue";
+import ChatView from "../views/ChatView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,19 +52,33 @@ const router = createRouter({
       },
     },
     {
-      path: "/map",
-      name: "map",
+      path: "/quiz",
+      name: "quiz",
       components: {
-        default: MapView,
+        default: QuizView,
         topbar: TopBarComponent,
       },
       props: {
         default: false,
         topbar: {
-          title: "Map",
+          title: "Quiz",
         },
       },
     },
+    {
+      path: "/chat/:id",
+      name: "chat",
+      components: {
+        default: ChatView,
+        topbar: TopBarComponent,
+      },
+      props: {
+        default: true,
+        topbar: {
+          title: "Chat"
+        },
+      }
+    }
   ],
 });
 
