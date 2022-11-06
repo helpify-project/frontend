@@ -31,7 +31,7 @@ function onChatRequest () {
 }
 
 const onHelpRequest = () => {
-  callNumber.value = "tel:+37253731015";
+  callNumber.value = "tel:+358401234567";
 
   showModal.value = true;
 }

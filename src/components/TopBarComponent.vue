@@ -8,7 +8,7 @@
         @click="onChatRequest"
     ></Icon>
 
-    <h1>
+    <h1 @onclick="onBecomeAdministrator()">
       {{ title }}
     </h1>
 
@@ -26,7 +26,11 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 function onChatRequest () {
-  router.push({ name: 'chat', params: { id: 1 }});
+    router.push({ name: 'chat', params: { id: 1 }});
+}
+
+function onBecomeAdministrator () {
+    return;
 }
 
 defineProps({
